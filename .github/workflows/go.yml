@@ -20,8 +20,6 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Get dependencies
-      env:
-        GOARCH: arm64
       run: |
         go get -v -t -d ./...
         if [ -f Gopkg.toml ]; then
@@ -30,6 +28,8 @@ jobs:
         fi
 
     - name: Build
+      env:
+        GOARCH: arm64
       run: go build -o jaeger-mongodb cmd/jaeger-mongodb/main.go
 
     - name: Create Mongo Docker container
