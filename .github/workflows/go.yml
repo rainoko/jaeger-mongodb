@@ -28,7 +28,7 @@ jobs:
 
     - name: Build AMD64
       env:
-        GOARCH: amd64
+        GOARCH: arm64
       run: |
         go env
         go build -o jaeger-mongodb cmd/jaeger-mongodb/main.go
@@ -55,7 +55,7 @@ jobs:
         context: .
         file: ./cmd/jaeger-mongodb/Dockerfile.collector
         push: true
-        platforms: linux/amd64
+        platforms: linux/amd64,linux/arm64
         build-args: |
           base_image=alpine:3.14.0
           jaeger_version=1.31.0
