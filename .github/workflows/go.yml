@@ -26,9 +26,10 @@ jobs:
             dep ensure
         fi
 
-    - name: Build AMD64
-#       env:
-#         GOARCH: arm64
+    - name: Build ARM64
+      env:
+        GOARCH: arm64
+        CGO_ENABLED: 0
       run: |
         go env
         go build -o jaeger-mongodb cmd/jaeger-mongodb/main.go
@@ -60,7 +61,36 @@ jobs:
           base_image=alpine:3.14.0
           jaeger_version=1.31.0
         tags: |
-          ghcr.io/rainoko/jaeger-collector-mongodb:1.31.0-10
+          ghcr.io/rainoko/jaeger-collector-mongodb:1.31.0-11
+    - name: Push to GitHub Packages Query
+      uses: docker/build-push-action@v2
+      with:
+        context: .
+        file: ./cmd/jaeger-mongodb/Dockerfile.query
+        push: true
+        platforms: linux/arm64
+        build-args: |
+          base_image=alpine:3.14.0
+          jaeger_version=1.31.0
+        tags: |
+          ghcr.io/rainoko/jaeger-query-mongodb:1.31.0-11
+    - name: Build AMD64
+      env:
+        GOARCH: amd64
+        CGO_ENABLED: 0
+      run: go build -o jaeger-mongodb cmd/jaeger-mongodb/main.go
+    - name: Push to GitHub Packages Collector
+      uses: docker/build-push-action@v2
+      with:
+        context: .
+        file: ./cmd/jaeger-mongodb/Dockerfile.collector
+        push: true
+        platforms: linux/amd64
+        build-args: |
+          base_image=alpine:3.14.0
+          jaeger_version=1.31.0
+        tags: |
+          ghcr.io/rainoko/jaeger-collector-mongodb:1.31.0-11
     - name: Push to GitHub Packages Query
       uses: docker/build-push-action@v2
       with:
@@ -72,33 +102,5 @@ jobs:
           base_image=alpine:3.14.0
           jaeger_version=1.31.0
         tags: |
-          ghcr.io/rainoko/jaeger-query-mongodb:1.31.0-10
-#     - name: Build AMD64
-#       env:
-#         GOARCH: amd64
-#       run: go build -o jaeger-mongodb cmd/jaeger-mongodb/main.go
-#     - name: Push to GitHub Packages Collector
-#       uses: docker/build-push-action@v2
-#       with:
-#         context: .
-#         file: ./cmd/jaeger-mongodb/Dockerfile.collector
-#         push: true
-#         platforms: linux/amd64
-#         build-args: |
-#           base_image=alpine:3.14.0
-#           jaeger_version=1.31.0
-#         tags: |
-#           ghcr.io/rainoko/jaeger-collector-mongodb:1.31.0-6
-#     - name: Push to GitHub Packages Query
-#       uses: docker/build-push-action@v2
-#       with:
-#         context: .
-#         file: ./cmd/jaeger-mongodb/Dockerfile.query
-#         push: true
-#         platforms: linux/amd64
-#         build-args: |
-#           base_image=alpine:3.14.0
-#           jaeger_version=1.31.0
-#         tags: |
-#           ghcr.io/rainoko/jaeger-query-mongodb:1.31.0-6
+          ghcr.io/rainoko/jaeger-query-mongodb:1.31.0-11
 
