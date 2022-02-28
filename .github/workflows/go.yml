@@ -32,7 +32,6 @@ jobs:
       run: |
         go env
         go build -o jaeger-mongodb cmd/jaeger-mongodb/main.go
-        ./jaeger-mongodb
 
     - name: Create Mongo Docker container
       run: docker run -d -p 27017:27017 mongo:4.4
