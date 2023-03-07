@@ -9,7 +9,7 @@ require (
 	github.com/jaegertracing/jaeger v1.20.0
 	github.com/spf13/viper v1.7.1
 	github.com/stretchr/testify v1.7.0
-	go.mongodb.org/mongo-driver v1.3.2
+	go.mongodb.org/mongo-driver v1.5.1
 	go.uber.org/zap v1.16.0
 	golang.org/x/tools v0.1.1 // indirect
 )
